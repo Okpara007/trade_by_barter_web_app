@@ -1,9 +1,162 @@
-
+{% extends 'base.html' %}
 {% load static %}
 
-<h1>Create a New Listing</h1>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Create Listing</button>
-</form>
+{% block content %}
+<style>
+  /* Hero styling (shorter than the main homepage hero) */
+  .create-listing-hero {
+    position: relative;
+    min-height: 40vh; /* shorter hero */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .create-listing-hero .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.6;
+  }
+  .create-listing-hero .shadow-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+    background: linear-gradient(to bottom, transparent 0%, #000 100%);
+  }
+  .create-listing-hero-content {
+    position: relative;
+    color: #fff;
+    z-index: 2;
+  }
+  .create-listing-hero-content h3 {
+    font-size: 1.6rem;
+    letter-spacing: 0.3rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+  .create-listing-hero-content h1 {
+    font-size: 3rem;
+    line-height: 1.2;
+  }
+
+  /* Container for the form */
+  .create-listing-section {
+    background: #111; /* matches your dark theme */
+    padding: 4rem 2rem;
+    color: #fff;
+  }
+  .create-listing-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #1b1b1b;
+    border-radius: 5px;
+    padding: 3rem;
+  }
+  .create-listing-container h2 {
+    font-size: 2.4rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: #39b54a; /* accent color */
+  }
+
+  /* Custom form styling */
+  .create-listing-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .create-listing-form label {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+  .create-listing-form input[type="text"],
+  .create-listing-form input[type="file"],
+  .create-listing-form textarea,
+  .create-listing-form select {
+    background: #2b2b2b;
+    border: 1px solid #444;
+    border-radius: 3px;
+    padding: 1rem;
+    color: #fff;
+    font-size: 1.4rem;
+    width: 110rem;
+  }
+  .create-listing-form input[type="text"]:focus,
+  .create-listing-form input[type="file"]:focus,
+  .create-listing-form textarea:focus,
+  .create-listing-form select:focus {
+    border-color: #39b54a;
+    outline: none;
+  }
+
+  /* Submit button */
+  .create-listing-form button {
+    align-self: center;
+    background: #39b54a;
+    border: none;
+    color: #fff;
+    
+    font-size: 1.4rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+  }
+  .create-listing-form button:hover {
+    background: #2e8f3d;
+  }
+
+  /* Responsive adjustments */
+  @media only screen and (max-width: 600px) {
+    .create-listing-hero-content h1 {
+      font-size: 2.2rem;
+    }
+    .create-listing-section {
+      padding: 2rem 1rem;
+    }
+    .create-listing-container {
+      padding: 2rem;
+    }
+    .create-listing-form button {
+      font-size: 1.2rem;
+      width: 100%;
+    }
+  }
+</style>
+
+<!-- Short Hero Section -->
+<section class="create-listing-hero target-section" 
+         data-parallax="scroll" 
+         data-image-src="{% static 'images/background.jpg' %}" 
+         data-natural-width="3000" 
+         data-natural-height="2000" 
+         data-position-y="center">
+  <div class="overlay"></div>
+  <div class="shadow-overlay"></div>
+  <div class="create-listing-hero-content">
+    <h3>Trade-By-Barter</h3>
+    <h1>Create a New Listing <br> Expand Your Barter Opportunities</h1>
+  </div>
+</section>
+
+<!-- Create Listing Form Section -->
+<section class="create-listing-section">
+  <div class="create-listing-container">
+    <h2>Create a New Listing</h2>
+    <form method="post" enctype="multipart/form-data" class="create-listing-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Create Listing</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

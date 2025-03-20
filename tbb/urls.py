@@ -18,6 +18,5 @@ urlpatterns = [
 # Custom 404 error handler
 # handler404 = pages_views.custom_404_view
 
-# Add static and media file handling for both DEBUG and production
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

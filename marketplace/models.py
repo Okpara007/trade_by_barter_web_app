@@ -1,12 +1,12 @@
-# marketplace/models.py
-
 from django.db import models
 from django.contrib.auth.models import User
+from cloudinary.models import CloudinaryField
 
 class Listing(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    image = models.ImageField(upload_to='listings/', null=True, blank=True)
+    category = models.CharField(max_length=100, blank=True)
+    image = CloudinaryField('image', blank=True, folder="TradeByBarter")
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='listings')
     created_at = models.DateTimeField(auto_now_add=True)
 

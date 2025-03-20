@@ -1,0 +1,26 @@
+
+{% load static %}
+
+  <h1>Search Listings</h1>
+
+  <form method="get" action="{% url 'listing_search' %}">
+    {{ form.as_p }}
+    <button type="submit">Search</button>
+  </form>
+
+  <hr>
+
+  <h2>Results</h2>
+  {% if listings %}
+    <ul>
+      {% for listing in listings %}
+        <li>
+          <a href="{% url 'listing' listing.pk %}">{{ listing.title }}</a>
+          <p>{{ listing.description|truncatewords:20 }}</p>
+          <p>Category: {{ listing.category }} | Location: {{ listing.location }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No listings found.</p>
+  {% endif %}

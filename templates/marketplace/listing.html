@@ -1,14 +1,162 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block content %}
-<h1>{{ listing.title }}</h1>
-<p>{{ listing.description }}</p>
-{% if listing.image %}
-    <img src="{{ listing.image.url }}" alt="{{ listing.title }}">
-{% endif %}
-<p>Posted by {{ listing.created_by.username }} on {{ listing.created_at|date:"F j, Y, g:i a" }}</p>
-<a href="{% url 'listings' %}">Back to Listings</a>
 
-<!-- Chat button: Pass the listing ID to the chat view -->
-<a href="{% url 'chat_view' listing.pk %}" class="btn">Chat with Seller</a>
+{% block content %}
+<style>
+  /* Short hero section */
+  .listing-detail-hero {
+    position: relative;
+    min-height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+  }
+  .listing-detail-hero .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.6;
+  }
+  .listing-detail-hero .shadow-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+    background: linear-gradient(to bottom, transparent 0%, #000 100%);
+  }
+  .listing-detail-hero-content {
+    position: relative;
+    z-index: 2;
+  }
+  .listing-detail-hero-content h1 {
+    font-size: 3rem;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  /* Detail Section */
+  .listing-detail-section {
+    background: #111;
+    padding: 4rem 2rem;
+    color: #fff;
+  }
+  .listing-detail-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #1b1b1b;
+    border-radius: 5px;
+    padding: 3rem;
+  }
+  .listing-detail-container h2 {
+    font-size: 2.4rem;
+    margin-bottom: 2rem;
+    color: #39b54a;
+  }
+
+  /* Listing info layout */
+  .listing-info {
+    margin-bottom: 2rem;
+  }
+  .listing-info img {
+    display: block;
+    margin: 1rem 0;
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border: 1px solid #444;
+    border-radius: 3px;
+  }
+  .listing-meta {
+    font-size: 1.4rem;
+    color: #999;
+    margin: 1rem 0;
+  }
+
+  /* Buttons container */
+  .listing-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .listing-buttons a {
+    background: #39b54a;
+    border: none;
+    color: #fff;
+    padding: 1rem 2rem;
+    font-size: 1.4rem;
+    cursor: pointer;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+  }
+  .listing-buttons a:hover {
+    background: #2e8f3d;
+  }
+
+  /* Responsive adjustments */
+  @media only screen and (max-width: 600px) {
+    .listing-detail-hero-content h1 {
+      font-size: 2.2rem;
+    }
+    .listing-detail-section {
+      padding: 2rem 1rem;
+    }
+    .listing-detail-container {
+      padding: 2rem;
+    }
+    .listing-buttons a {
+      font-size: 1.2rem;
+      width: 100%;
+    }
+  }
+</style>
+
+<!-- Short Hero Section -->
+<section class="listing-detail-hero target-section" 
+         data-parallax="scroll" 
+         data-image-src="{% static 'images/background.jpg' %}" 
+         data-natural-width="3000" 
+         data-natural-height="2000" 
+         data-position-y="center">
+  <div class="overlay"></div>
+  <div class="shadow-overlay"></div>
+  <div class="listing-detail-hero-content">
+    <h1>{{ listing.title }}</h1>
+  </div>
+</section>
+
+<!-- Listing Detail Section -->
+<section class="listing-detail-section">
+  <div class="listing-detail-container">
+    <div class="listing-info">
+      <h2>Listing Details</h2>
+      <p>{{ listing.description }}</p>
+      {% if listing.image %}
+        <img src="{{ listing.image.url }}" alt="{{ listing.title }}">
+      {% endif %}
+      <div class="listing-meta">
+        Posted by {{ listing.created_by.username }} 
+        on {{ listing.created_at|date:"F j, Y, g:i a" }}
+      </div>
+    </div>
+
+    <div class="listing-buttons">
+      <!-- Back to Listings -->
+      <a href="{% url 'listings' %}">Back to Listings</a>
+
+      <!-- Chat with Seller -->
+      <a href="{% url 'chat_view' listing.pk %}">Chat with Seller</a>
+    </div>
+  </div>
+</section>
 {% endblock %}

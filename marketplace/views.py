@@ -2,7 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Listing, TradeRequest
-from .forms import ListingForm, TradeRequestForm
+from .forms import ListingForm, TradeRequestForm, ListingSearchForm
+from django.db.models import Q
 
 def listings(request):
     """
@@ -97,3 +98,30 @@ def trade_request_reject(request, pk):
     else:
         messages.error(request, "You cannot reject this request.")
     return redirect('trade_request_detail', pk=pk)
+
+def listing_search(request):
+    form = ListingSearchForm(request.GET or None)
+    listings = Listing.objects.all().order_by('-created_at')
+
+    if form.is_valid():
+        category = form.cleaned_data.get('category')
+        location = form.cleaned_data.get('location')
+        trade_preferences = form.cleaned_data.get('trade_preferences')
+        query = form.cleaned_data.get('query')
+
+        if category:
+            listings = listings.filter(category__icontains=category)
+        if location:
+            listings = listings.filter(location__icontains=location)
+        if trade_preferences:
+            listings = listings.filter(trade_preferences__icontains=trade_preferences)
+        if query:
+            listings = listings.filter(
+                Q(title__icontains=query) | Q(description__icontains=query)
+            )
+
+    context = {
+        'form': form,
+        'listings': listings,
+    }
+    return render(request, 'marketplace/listing_search.html', context)
