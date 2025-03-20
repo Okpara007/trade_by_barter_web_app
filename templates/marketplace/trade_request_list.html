@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Your Trade Requests</h2>
+
+<h3>Requests You've Sent</h3>
+<ul>
+  {% for req in sent_requests %}
+    <li>
+      To: {{ req.receiver.username }}, 
+      Listing: {{ req.listing.title }}, 
+      Status: {{ req.status }} 
+      (<a href="{% url 'trade_request_detail' req.pk %}">View</a>)
+    </li>
+  {% empty %}
+    <li>No outgoing requests.</li>
+  {% endfor %}
+</ul>
+
+<h3>Requests You've Received</h3>
+<ul>
+  {% for req in received_requests %}
+    <li>
+      From: {{ req.sender.username }}, 
+      Listing: {{ req.listing.title }}, 
+      Status: {{ req.status }}
+      (<a href="{% url 'trade_request_detail' req.pk %}">View</a>)
+    </li>
+  {% empty %}
+    <li>No incoming requests.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

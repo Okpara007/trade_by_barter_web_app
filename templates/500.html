@@ -1,0 +1,38 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'images/TW_ICON.png' %}" rel="icon" type="image/x-icon">
+    <title>500 - Server Error</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background: linear-gradient(180deg, #f6a762, #008F7F);
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        h1 {
+            font-size: 12rem;
+            margin: 0;
+        }
+        p {
+            font-size: 1.5rem;
+            margin: 1rem 0;
+            margin-bottom: 4rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>500</h1>
+    <p>Sorry, something went wrong on our end. Please try again later.</p>
+</body>
+</html>

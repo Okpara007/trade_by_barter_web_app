@@ -1,0 +1,15 @@
+
+{% load static %}
+
+<h1>Listings</h1>
+<ul>
+    {% for listing in listings %}
+    <li>
+        <a href="{% url 'listing' listing.pk %}">{{ listing.title }}</a>
+        <p>{{ listing.description|truncatewords:20 }}</p>
+    </li>
+    {% empty %}
+    <li>No listings available.</li>
+    {% endfor %}
+</ul>
+

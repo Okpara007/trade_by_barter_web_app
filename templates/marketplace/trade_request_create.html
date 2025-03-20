@@ -1,0 +1,8 @@
+
+<h2>Send Trade Request for {{ listing.title }}</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Send Request</button>
+</form>
+

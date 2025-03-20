@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<h1>{{ listing.title }}</h1>
+<p>{{ listing.description }}</p>
+{% if listing.image %}
+    <img src="{{ listing.image.url }}" alt="{{ listing.title }}">
+{% endif %}
+<p>Posted by {{ listing.created_by.username }} on {{ listing.created_at|date:"F j, Y, g:i a" }}</p>
+<a href="{% url 'listings' %}">Back to Listings</a>
+
+<!-- Chat button: Pass the listing ID to the chat view -->
+<a href="{% url 'chat_view' listing.pk %}" class="btn">Chat with Seller</a>
+{% endblock %}

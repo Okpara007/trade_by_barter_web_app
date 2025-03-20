@@ -1,0 +1,16 @@
+
+{% load static %}
+
+  <h2>Your Profile</h2>
+
+  <!-- If you want read-only display, you can just show fields:
+  <p>Role: {{ profile.role }}</p>
+  <p>Bio: {{ profile.bio }}</p>
+  -->
+
+  <!-- Editable form -->
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Update Profile</button>
+  </form>

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Trade Request Details</h2>
+<p>Sender: {{ trade_request.sender.username }}</p>
+<p>Receiver: {{ trade_request.receiver.username }}</p>
+<p>Listing: <a href="{% url 'listing' trade_request.listing.pk %}">{{ trade_request.listing.title }}</a></p>
+<p>Status: {{ trade_request.status }}</p>
+<p>Message: {{ trade_request.message }}</p>
+
+{% if trade_request.receiver == user and trade_request.status == 'pending' %}
+  <a href="{% url 'trade_request_accept' trade_request.pk %}">Accept</a> |
+  <a href="{% url 'trade_request_reject' trade_request.pk %}">Reject</a>
+{% endif %}
+{% endblock %}
