@@ -4,7 +4,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 from pages import views as pages_views
 
-# Main URL patterns
 urlpatterns = [
     path('', include('pages.urls')),
     # path('services', include('services.urls')),

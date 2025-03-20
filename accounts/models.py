@@ -8,7 +8,6 @@ class Profile(models.Model):
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
-    # Agents require admin approval; traders are automatically approved
     approved = models.BooleanField(default=True)
     bio = models.TextField(blank=True, null=True) 
 

@@ -16,7 +16,6 @@ class CustomUserCreationForm(UserCreationForm):
         user.email = self.cleaned_data['email']
         if commit:
             user.save()
-            # If role is agent, require admin approval (approved remains False)
             if self.cleaned_data['role'] == 'agent':
                 Profile.objects.filter(user=user).update(role='agent', approved=False)
             else:

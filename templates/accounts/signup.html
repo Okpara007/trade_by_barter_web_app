@@ -1,7 +1,6 @@
   <h2>Register</h2>
   <form method="post">
       {% csrf_token %}
-      <!-- Render fields explicitly to ensure 'role' is visible -->
       <div>
           {{ form.username.label_tag }}
           {{ form.username }}

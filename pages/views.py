@@ -13,9 +13,6 @@ def index(request):
 def about(request):
     return render(request, 'pages/about.html')
 
-# def what_we_do(request):
-#     return render(request, 'pages/what_we_do.html')
-
 # def custom_404_view(request, exception):
 #     return render(request, '404.html', {'path': request.path}, status=404)
 

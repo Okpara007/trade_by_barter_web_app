@@ -4,7 +4,6 @@ from marketplace.models import Listing
 
 @login_required
 def chat_view(request, listing_id):
-    # Get the listing and use the listing owner as the other user in the chat.
     listing = get_object_or_404(Listing, pk=listing_id)
     other_user = listing.created_by
     context = {

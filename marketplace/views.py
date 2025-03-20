@@ -1,5 +1,3 @@
-# marketplace/views.py
-
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -22,7 +20,7 @@ def create_listing(request):
         form = ListingForm(request.POST, request.FILES)
         if form.is_valid():
             listing = form.save(commit=False)
-            listing.created_by = request.user  # Associate the listing with the logged-in user
+            listing.created_by = request.user  
             listing.save()
             return redirect('listing', pk=listing.pk)
     else:
@@ -59,7 +57,6 @@ def trade_request_create(request, listing_id):
 
 @login_required
 def trade_request_list(request):
-    # Show trade requests where the user is either sender or receiver
     sent_requests = TradeRequest.objects.filter(sender=request.user)
     received_requests = TradeRequest.objects.filter(receiver=request.user)
     return render(request, 'marketplace/trade_request_list.html', {
@@ -71,7 +68,6 @@ def trade_request_list(request):
 def trade_request_detail(request, pk):
     trade_request = get_object_or_404(TradeRequest, pk=pk)
 
-    # Check if the current user has permission to view or manage this request
     if trade_request.receiver != request.user and trade_request.sender != request.user:
         messages.error(request, "You do not have permission to view this trade request.")
         return redirect('trade_request_list')
