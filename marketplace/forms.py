@@ -5,7 +5,7 @@ from .models import TradeRequest
 class ListingForm(forms.ModelForm):
     class Meta:
         model = Listing
-        fields = ['title', 'description', 'category', 'image']
+        fields = ['title', 'description', 'category', 'location', 'image']
 
     def clean_image(self):
         image = self.cleaned_data.get('image', False)

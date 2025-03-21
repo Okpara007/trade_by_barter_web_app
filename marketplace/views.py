@@ -29,11 +29,12 @@ def create_listing(request):
     return render(request, 'marketplace/create_listing.html', {'form': form})
 
 def listing(request, pk):
-    """
-    Show detailed information for a single listing identified by its primary key.
-    """
-    listing = get_object_or_404(Listing, pk=pk)
-    return render(request, 'marketplace/listing.html', {'listing': listing})
+    listing_obj = get_object_or_404(Listing, pk=pk)
+    is_owner = request.user.is_authenticated and (request.user == listing_obj.created_by)
+    return render(request, 'marketplace/listing.html', {
+        'listing': listing_obj,
+        'is_owner': is_owner
+    })
 
 @login_required
 def trade_request_create(request, listing_id):

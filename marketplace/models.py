@@ -6,6 +6,7 @@ class Listing(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     category = models.CharField(max_length=100, blank=True)
+    location = models.CharField(max_length=255, blank=True) 
     image = CloudinaryField('image', blank=True, folder="TradeByBarter")
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='listings')
     created_at = models.DateTimeField(auto_now_add=True)

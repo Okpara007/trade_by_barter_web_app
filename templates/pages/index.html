@@ -2,8 +2,6 @@
 {% load static %}
 
 {% block content %}
-    <!-- home
-    ================================================== -->
     <section id="home" class="s-home target-section" data-parallax="scroll" data-image-src="{% static 'images/exchange.jpg' %}" data-natural-width=3000 data-natural-height=2000 data-position-y=center>
 
         <div class="overlay"></div>
@@ -23,8 +21,8 @@
                     <a href="{% url 'create_listing' %}" class=" btn btn--stroke">
                         List an Item
                     </a>
-                    <a href="#howitworks" class="smoothscroll btn btn--stroke">
-                        How It Works
+                    <a href="#about" class="smoothscroll btn btn--stroke">
+                        About
                     </a>
                 </div>
             </div>
@@ -36,7 +34,7 @@
             </div>
 
             <div class="home-content__line"></div>
-        </div> <!-- end home-content -->
+        </div>
 
         <ul class="home-social">
             <li>
@@ -52,9 +50,8 @@
                 <a href="#0"><i class="fa fa-linkedin" aria-hidden="true"></i><span>LinkedIn</span></a>
             </li>
         </ul> 
-        <!-- end home-social -->
 
-    </section> <!-- end s-home -->
+    </section> 
 
 
     <!-- about

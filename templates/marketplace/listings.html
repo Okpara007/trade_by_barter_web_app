@@ -42,6 +42,14 @@
     margin: 0;
   }
 
+  .listing-actions {
+    margin: 4rem 0;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
+
   @media only screen and (max-width: 900px) {
     .listings-grid {
       grid-template-columns: repeat(2, 1fr);
@@ -122,8 +130,10 @@
     </div>
   </div>
 
-  <div class="create-listing-btn" data-aos="fade-up">
+  <div class="listing-actions" data-aos="fade-up">
     <a href="{% url 'create_listing' %}" class="btn btn--primary btn--large">Create New Listing</a>
+    <!-- Adjust 'listing_search' to your actual search URL name -->
+    <a href="{% url 'listing_search' %}" class="btn btn--primary btn--large">Search Listings</a>
   </div>
 </section>
 {% endblock %}
