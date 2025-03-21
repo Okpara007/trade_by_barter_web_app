@@ -2,7 +2,6 @@
 {% load static %}
 {% block content %}
 <style>
-  /* Hero Section for Search */
   .search-hero {
     position: relative;
     min-height: 30vh;
@@ -34,7 +33,6 @@
     letter-spacing: 0.1rem;
   }
 
-  /* Container for the search form and results */
   .search-container {
     background: #111;
     padding: 2rem;
@@ -44,7 +42,6 @@
     color: #fff;
   }
   
-  /* Search Form Styling */
   .search-form {
     display: flex;
     align-items: center;
@@ -61,7 +58,6 @@
     color: #fff;
   }
   .search-form button {
-    padding: 1rem 2rem;
     font-size: 1.4rem;
     background: #39b54a;
     border: none;
@@ -71,12 +67,12 @@
     text-transform: uppercase;
     letter-spacing: 0.1rem;
     transition: background 0.3s ease;
+    margin-bottom: 2.6rem;
   }
   .search-form button:hover {
     background: #2e8f3d;
   }
-  
-  /* Results Styling */
+
   .results-list {
     list-style: none;
     padding: 0;
@@ -103,7 +99,16 @@
     color: #ccc;
   }
 
-  /* Responsive adjustments */
+  label, legend {
+    font-family: "montserrat-regular", sans-serif;
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: .9rem;
+    line-height: 1.714;
+    color: #fff;
+    display: block;
+}
+
   @media only screen and (max-width: 600px) {
     .search-hero-content h1 {
       font-size: 2.2rem;
@@ -122,7 +127,6 @@
   }
 </style>
 
-<!-- Hero Section -->
 <section class="search-hero target-section">
   <div class="overlay"></div>
   <div class="search-hero-content">
@@ -130,14 +134,13 @@
   </div>
 </section>
 
-<!-- Search Container -->
 <div class="search-container">
   <form method="get" action="{% url 'listing_search' %}" class="search-form">
     {{ form.as_p }}
     <button type="submit">Search</button>
   </form>
   <hr style="border-color: #444;">
-  <h2>Results</h2>
+  <h2 style="color: #fff;">Results</h2>
   {% if listings %}
     <ul class="results-list">
       {% for listing in listings %}
