@@ -1,14 +1,170 @@
 {% extends 'base.html' %}
-{% block content %}
-<h2>Trade Request Details</h2>
-<p>Sender: {{ trade_request.sender.username }}</p>
-<p>Receiver: {{ trade_request.receiver.username }}</p>
-<p>Listing: <a href="{% url 'listing' trade_request.listing.pk %}">{{ trade_request.listing.title }}</a></p>
-<p>Status: {{ trade_request.status }}</p>
-<p>Message: {{ trade_request.message }}</p>
+{% load static %}
 
-{% if trade_request.receiver == user and trade_request.status == 'pending' %}
-  <a href="{% url 'trade_request_accept' trade_request.pk %}">Accept</a> |
-  <a href="{% url 'trade_request_reject' trade_request.pk %}">Reject</a>
-{% endif %}
+{% block content %}
+<style>
+  /* Short Hero Section */
+  .request-detail-hero {
+    position: relative;
+    min-height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+  }
+  .request-detail-hero .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.6;
+  }
+  .request-detail-hero .shadow-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+    background: linear-gradient(to bottom, transparent 0%, #000 100%);
+  }
+  .request-detail-hero-content {
+    position: relative;
+    z-index: 2;
+  }
+  .request-detail-hero-content h1 {
+    font-size: 3rem;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  /* Detail Section */
+  .request-detail-section {
+    background: #111;
+    padding: 4rem 2rem;
+    color: #fff;
+  }
+  .request-detail-container {
+    max-width: 700px;
+    margin: 0 auto;
+    background: #1b1b1b;
+    border-radius: 5px;
+    padding: 3rem;
+  }
+  .request-detail-container h2 {
+    font-size: 2.4rem;
+    margin-bottom: 2rem;
+    color: #39b54a;
+  }
+
+  /* Request info layout */
+  .request-info {
+    margin-bottom: 2rem;
+    font-size: 1.4rem;
+    line-height: 1.6;
+  }
+  .request-info p {
+    margin: 0.6rem 0;
+  }
+  .request-info .listing-title {
+    font-weight: 600;
+    color: #ddd;
+  }
+
+  /* Buttons container */
+  .request-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .request-buttons a {
+    background: #39b54a;
+    border: none;
+    color: #fff;
+    padding: 1rem 2rem;
+    font-size: 1.4rem;
+    cursor: pointer;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+  }
+  .request-buttons a.btn-accept {
+    background: #39b54a;
+  }
+  .request-buttons a.btn-accept:hover {
+    background: #2e8f3d;
+  }
+  /* Reject Button (Red) */
+  .request-buttons a.btn-reject {
+    background: #ff6163;
+  }
+  .request-buttons a.btn-reject:hover {
+    background: #e85a5c;
+  }
+
+  /* Responsive adjustments */
+  @media only screen and (max-width: 600px) {
+    .request-detail-hero-content h1 {
+      font-size: 2.2rem;
+    }
+    .request-detail-section {
+      padding: 2rem 1rem;
+    }
+    .request-detail-container {
+      padding: 2rem;
+    }
+    .request-buttons a {
+      font-size: 1.2rem;
+      width: 100%;
+    }
+  }
+</style>
+
+<!-- Short Hero Section -->
+<section class="request-detail-hero target-section" 
+         data-parallax="scroll" 
+         data-image-src="{% static 'images/background.jpg' %}" 
+         data-natural-width="3000" 
+         data-natural-height="2000" 
+         data-position-y="center">
+  <div class="overlay"></div>
+  <div class="shadow-overlay"></div>
+  <div class="request-detail-hero-content">
+    <h1>Trade Request Details</h1>
+  </div>
+</section>
+
+<!-- Request Detail Section -->
+<section class="request-detail-section">
+  <div class="request-detail-container">
+    <div class="request-buttons">
+      <a href="{% url 'trade_request_list' %}">Back to Requests</a>
+    </div>
+    <h2>Request for Listing: {{ trade_request.listing.title }}</h2>
+    <div class="request-info">
+      <p><span class="listing-title">Listing:</span> {{ trade_request.listing.title }}</p>
+      <p><strong>Sender:</strong> {{ trade_request.sender.username }}</p>
+      <p><strong>Receiver:</strong> {{ trade_request.receiver.username }}</p>
+      <p><strong>Status:</strong> {{ trade_request.status }}</p>
+      <p><strong>Message:</strong> {{ trade_request.message }}</p>
+    </div>
+
+    <!-- Buttons for Accept/Reject if relevant -->
+    <div class="request-buttons">
+      <!-- e.g., if user is the receiver and request is pending, show accept/reject -->
+      {% if trade_request.status == 'pending' and user == trade_request.receiver %}
+        <a class="btn-accept" href="{% url 'trade_request_accept' trade_request.pk %}">Accept</a>
+        <a class="btn-reject" href="{% url 'trade_request_reject' trade_request.pk %}">Reject</a>
+      {% endif %}
+      <!-- Back to Requests List -->
+      
+    </div>
+  </div>
+</section>
 {% endblock %}

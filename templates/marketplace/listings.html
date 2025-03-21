@@ -3,23 +3,20 @@
 
 {% block content %}
 <style>
-  /* Grid container for listings: 3 columns on desktop */
   .listings-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
   }
 
-  /* Each listing item */
   .listing-item {
     background: #fff;
     overflow: hidden;
     text-align: center;
   }
 
-  /* Image container with fixed dimensions */
   .listing-image {
     width: 100%;
-    height: 400px; /* Desktop height */
+    height: 400px; 
     overflow: hidden;
     position: relative;
   }
@@ -45,7 +42,6 @@
     margin: 0;
   }
 
-  /* Responsive adjustments: 2 columns on medium screens, 1 on small */
   @media only screen and (max-width: 900px) {
     .listings-grid {
       grid-template-columns: repeat(2, 1fr);
@@ -63,14 +59,12 @@
     }
   }
 
-  /* Create Listing Button */
   .create-listing-btn {
     text-align: center;
     margin: 4rem 0;
   }
 </style>
 
-<!-- Hero Section -->
 <section id="listings-hero" class="s-home target-section" 
          data-parallax="scroll" 
          data-image-src="{% static 'images/background.jpg' %}" 
@@ -90,7 +84,6 @@
   </div>
 </section>
 
-<!-- Main Listings Section -->
 <section id="listings" class="s-works">
   <div class="intro-wrap" style="padding: 6rem 0 3rem;">
     <div class="row section-header has-bottom-sep light-sep" data-aos="fade-up">
@@ -129,7 +122,6 @@
     </div>
   </div>
 
-  <!-- Create Listing Button -->
   <div class="create-listing-btn" data-aos="fade-up">
     <a href="{% url 'create_listing' %}" class="btn btn--primary btn--large">Create New Listing</a>
   </div>

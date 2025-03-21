@@ -16,10 +16,10 @@ class ListingForm(forms.ModelForm):
 class TradeRequestForm(forms.ModelForm):
     class Meta:
         model = TradeRequest
-        fields = ['message']
+        fields = ['message', 'image']
 
 class ListingSearchForm(forms.Form):
-    # category = forms.CharField(required=False, label="Category")
+    category = forms.CharField(required=False, label="Category")
     # location = forms.CharField(required=False, label="Location")
     # trade_preferences = forms.CharField(required=False, label="Trade Preferences")
     query = forms.CharField(required=False, label="Search")

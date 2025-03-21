@@ -139,6 +139,9 @@
 <section class="listing-detail-section">
   <div class="listing-detail-container">
     <div class="listing-info">
+      <div class="listing-buttons">
+        <a href="{% url 'listings' %}">Back to Listings</a> 
+      </div>
       <h2>Listing Details</h2>
       <p>{{ listing.description }}</p>
       {% if listing.image %}
@@ -152,10 +155,13 @@
 
     <div class="listing-buttons">
       <!-- Back to Listings -->
-      <a href="{% url 'listings' %}">Back to Listings</a>
+      <!-- <a href="{% url 'listings' %}">Back to Listings</a> -->
 
       <!-- Chat with Seller -->
       <a href="{% url 'chat_view' listing.pk %}">Chat with Seller</a>
+
+      <!-- Trade Request -->
+      <a href="{% url 'trade_request_create' listing.pk %}">Request Trade</a>
     </div>
   </div>
 </section>

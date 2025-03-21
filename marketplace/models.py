@@ -25,6 +25,7 @@ class TradeRequest(models.Model):
     receiver = models.ForeignKey(User, related_name='trade_requests_received', on_delete=models.CASCADE)
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    image = CloudinaryField('image', blank=True, folder="TradeByBarter")
     message = models.TextField(blank=True)  
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

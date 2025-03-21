@@ -1,30 +1,208 @@
-  <h2>Register</h2>
-  <form method="post">
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<style>
+  /* Short Hero Section */
+  .register-hero {
+    position: relative;
+    min-height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+  }
+  .register-hero .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.6;
+  }
+  .register-hero .shadow-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+    background: linear-gradient(to bottom, transparent 0%, #000 100%);
+  }
+  .register-hero-content {
+    position: relative;
+    z-index: 2;
+  }
+  .register-hero-content h1 {
+    font-size: 3rem;
+    margin: 0;
+    line-height: 1.2;
+  }
+  .register-hero-content p {
+    font-size: 1.6rem;
+    margin-top: 1rem;
+    opacity: 0.8;
+  }
+
+  /* Registration Section */
+  .register-section {
+    background: #111;
+    padding: 4rem 2rem;
+    color: #fff;
+  }
+  .register-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: #1b1b1b;
+    border-radius: 5px;
+    padding: 3rem;
+  }
+  .register-container h2 {
+    font-size: 2.4rem;
+    margin-bottom: 2rem;
+    color: #39b54a;
+    text-align: center;
+  }
+
+  /* Form styling */
+  .register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .register-form .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  .register-form .form-group label {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    color: #fff;
+  }
+  .register-form .form-group input[type="text"],
+  .register-form .form-group input[type="email"],
+  .register-form .form-group input[type="password"],
+  .register-form .form-group select {
+    background: #2b2b2b;
+    border: 1px solid #444;
+    border-radius: 3px;
+    padding: 1rem;
+    color: #fff;
+    font-size: 1.4rem;
+  }
+  .register-form .form-group input[type="text"]:focus,
+  .register-form .form-group input[type="email"]:focus,
+  .register-form .form-group input[type="password"]:focus,
+  .register-form .form-group select:focus {
+    border-color: #39b54a;
+    outline: none;
+  }
+
+  /* Error messages */
+  .register-form .form-group .errorlist {
+    color: #ff6163;
+    font-size: 1.2rem;
+    margin-top: 0.3rem;
+  }
+
+  /* Submit button */
+  .register-form button {
+    align-self: center;
+    background: #39b54a;
+    border: none;
+    color: #fff;
+    font-size: 1.4rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+  }
+  .register-form button:hover {
+    background: #2e8f3d;
+  }
+
+  /* Responsive adjustments */
+  @media only screen and (max-width: 600px) {
+    .register-hero-content h1 {
+      font-size: 2.2rem;
+    }
+    .register-hero-content p {
+      font-size: 1.4rem;
+    }
+    .register-section {
+      padding: 2rem 1rem;
+    }
+    .register-container {
+      padding: 2rem;
+    }
+    .register-form button {
+      font-size: 1.2rem;
+      width: 100%;
+    }
+  }
+</style>
+
+<!-- Short Hero Section -->
+<section class="register-hero target-section" 
+         data-parallax="scroll" 
+         data-image-src="{% static 'images/background.jpg' %}" 
+         data-natural-width="3000" 
+         data-natural-height="2000" 
+         data-position-y="center">
+  <div class="overlay"></div>
+  <div class="shadow-overlay"></div>
+  <div class="register-hero-content">
+    <h1>Join Trade-By-Barter</h1>
+    <p>Expand your barter network and unlock endless opportunities</p>
+  </div>
+</section>
+
+<!-- Registration Section -->
+<section class="register-section">
+  <div class="register-container">
+    <h2>Create Your Account</h2>
+    <form method="post" class="register-form">
       {% csrf_token %}
-      <div>
-          {{ form.username.label_tag }}
-          {{ form.username }}
-          {{ form.username.errors }}
+
+      <!-- Username -->
+      <div class="form-group">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+        {{ form.username.errors }}
       </div>
-      <div>
-          {{ form.email.label_tag }}
-          {{ form.email }}
-          {{ form.email.errors }}
+
+      <!-- Email -->
+      <div class="form-group">
+        {{ form.email.label_tag }}
+        {{ form.email }}
+        {{ form.email.errors }}
       </div>
-      <div>
-          {{ form.password1.label_tag }}
-          {{ form.password1 }}
-          {{ form.password1.errors }}
+
+      <!-- Password 1 -->
+      <div class="form-group">
+        {{ form.password1.label_tag }}
+        {{ form.password1 }}
+        {{ form.password1.errors }}
       </div>
-      <div>
-          {{ form.password2.label_tag }}
-          {{ form.password2 }}
-          {{ form.password2.errors }}
+
+      <!-- Password 2 -->
+      <div class="form-group">
+        {{ form.password2.label_tag }}
+        {{ form.password2 }}
+        {{ form.password2.errors }}
       </div>
-      <div>
-          {{ form.role.label_tag }}
-          {{ form.role }}
-          {{ form.role.errors }}
+
+      <!-- Role -->
+      <div class="form-group">
+        {{ form.role.label_tag }}
+        {{ form.role }}
+        {{ form.role.errors }}
       </div>
+
       <button type="submit">Register</button>
-  </form>
+    </form>
+  </div>
+</section>
+{% endblock %}

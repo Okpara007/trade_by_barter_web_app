@@ -1,8 +1,176 @@
+{% extends 'base.html' %}
+{% load static %}
 
-<h2>Send Trade Request for {{ listing.title }}</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Send Request</button>
-</form>
+{% block content %}
+<style>
+  /* Short Hero Section */
+  .trade-request-hero {
+    position: relative;
+    min-height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+  }
+  .trade-request-hero .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.6;
+  }
+  .trade-request-hero .shadow-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+    background: linear-gradient(to bottom, transparent 0%, #000 100%);
+  }
+  .trade-request-hero-content {
+    position: relative;
+    z-index: 2;
+  }
+  .trade-request-hero-content h1 {
+    font-size: 3rem;
+    margin: 0;
+    line-height: 1.2;
+  }
+  .trade-request-hero-content p {
+    font-size: 1.6rem;
+    margin-top: 1rem;
+    opacity: 0.8;
+  }
 
+  /* Trade Request Section */
+  .trade-request-section {
+    background: #111;
+    padding: 4rem 2rem;
+    color: #fff;
+  }
+  .trade-request-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: #1b1b1b;
+    border-radius: 5px;
+    padding: 3rem;
+  }
+  .trade-request-container h2 {
+    font-size: 2.4rem;
+    margin-bottom: 2rem;
+    color: #39b54a;
+    text-align: center;
+  }
+
+  /* Form styling */
+  .trade-request-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .trade-request-form .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  .trade-request-form .form-group label {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+  .trade-request-form .form-group input[type="file"],
+  .trade-request-form .form-group input[type="text"],
+  .trade-request-form .form-group textarea {
+    background: #2b2b2b;
+    border: 1px solid #444;
+    border-radius: 3px;
+    padding: 1rem;
+    color: #fff;
+    font-size: 1.4rem;
+  }
+  .trade-request-form .form-group input[type="file"]:focus,
+  .trade-request-form .form-group input[type="text"]:focus,
+  .trade-request-form .form-group textarea:focus {
+    border-color: #39b54a;
+    outline: none;
+  }
+
+  /* Submit button */
+  .trade-request-form button {
+    align-self: center;
+    background: #39b54a;
+    border: none;
+    color: #fff;
+    font-size: 1.4rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+  }
+  .trade-request-form button:hover {
+    background: #2e8f3d;
+  }
+
+  /* Responsive adjustments */
+  @media only screen and (max-width: 600px) {
+    .trade-request-hero-content h1 {
+      font-size: 2.2rem;
+    }
+    .trade-request-hero-content p {
+      font-size: 1.4rem;
+    }
+    .trade-request-section {
+      padding: 2rem 1rem;
+    }
+    .trade-request-container {
+      padding: 2rem;
+    }
+    .trade-request-form button {
+      font-size: 1.2rem;
+      width: 100%;
+    }
+  }
+</style>
+
+<!-- Short Hero Section -->
+<section class="trade-request-hero target-section" 
+         data-parallax="scroll" 
+         data-image-src="{% static 'images/background.jpg' %}" 
+         data-natural-width="3000" 
+         data-natural-height="2000" 
+         data-position-y="center">
+  <div class="overlay"></div>
+  <div class="shadow-overlay"></div>
+  <div class="trade-request-hero-content">
+    <h1>Send Trade Request</h1>
+    <p>Exchange goods seamlessly for "{{ listing.title }}"</p>
+  </div>
+</section>
+
+<!-- Trade Request Section -->
+<section class="trade-request-section">
+  <div class="trade-request-container">
+    <h2>Send Trade Request for {{ listing.title }}</h2>
+
+    <!-- Remember to include enctype for file uploads -->
+    <form method="post" enctype="multipart/form-data" class="trade-request-form">
+      {% csrf_token %}
+      <!-- Example of manual field grouping if your form has 'message' and 'image' fields -->
+      <div class="form-group">
+        {{ form.message.label_tag }}
+        {{ form.message }}
+        {{ form.message.errors }}
+      </div>
+      <div class="form-group">
+        {{ form.image.label_tag }} 
+        {{ form.image }}
+        {{ form.image.errors }}
+      </div>
+      <button type="submit">Send Request</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

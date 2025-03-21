@@ -1,19 +1,186 @@
-<h2>Login</h2>
-{% if messages %}
-  {% for message in messages %}
-    <p style="color:red;">{{ message }}</p>
-  {% endfor %}
-{% endif %}
+{% extends 'base.html' %}
+{% load static %}
 
-<form method="post">
-    {% csrf_token %}
-    <div>
+{% block content %}
+<style>
+  /* Short Hero Section */
+  .login-hero {
+    position: relative;
+    min-height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+  }
+  .login-hero .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.6;
+  }
+  .login-hero .shadow-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+    background: linear-gradient(to bottom, transparent 0%, #000 100%);
+  }
+  .login-hero-content {
+    position: relative;
+    z-index: 2;
+  }
+  .login-hero-content h1 {
+    font-size: 3rem;
+    margin: 0;
+    line-height: 1.2;
+  }
+  .login-hero-content p {
+    font-size: 1.6rem;
+    margin-top: 1rem;
+    opacity: 0.8;
+  }
+
+  /* Login Section */
+  .login-section {
+    background: #111;
+    padding: 4rem 2rem;
+    color: #fff;
+  }
+  .login-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #1b1b1b;
+    border-radius: 5px;
+    padding: 3rem;
+  }
+  .login-container h2 {
+    font-size: 2.4rem;
+    margin-bottom: 2rem;
+    color: #39b54a;
+    text-align: center;
+  }
+
+  /* Messages styling */
+  .login-messages p {
+    color: #ff6163; /* Red for errors or warnings */
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Login form styling */
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .login-form .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  .login-form .form-group label {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+  .login-form .form-group input[type="text"],
+  .login-form .form-group input[type="password"] {
+    background: #2b2b2b;
+    border: 1px solid #444;
+    border-radius: 3px;
+    padding: 1rem;
+    color: #fff;
+    font-size: 1.4rem;
+  }
+  .login-form .form-group input[type="text"]:focus,
+  .login-form .form-group input[type="password"]:focus {
+    border-color: #39b54a;
+    outline: none;
+  }
+
+  /* Submit button */
+  .login-form button {
+    align-self: center;
+    background: #39b54a;
+    border: none;
+    color: #fff;
+    font-size: 1.4rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+  }
+  .login-form button:hover {
+    background: #2e8f3d;
+  }
+
+  /* Responsive adjustments */
+  @media only screen and (max-width: 600px) {
+    .login-hero-content h1 {
+      font-size: 2.2rem;
+    }
+    .login-hero-content p {
+      font-size: 1.4rem;
+    }
+    .login-section {
+      padding: 2rem 1rem;
+    }
+    .login-container {
+      padding: 2rem;
+    }
+    .login-form button {
+      font-size: 1.2rem;
+      width: 100%;
+    }
+  }
+</style>
+
+<!-- Short Hero Section -->
+<section class="login-hero target-section" 
+         data-parallax="scroll" 
+         data-image-src="{% static 'images/background.jpg' %}" 
+         data-natural-width="3000" 
+         data-natural-height="2000" 
+         data-position-y="center">
+  <div class="overlay"></div>
+  <div class="shadow-overlay"></div>
+  <div class="login-hero-content">
+    <h1>Welcome Back</h1>
+    <p>Log in to continue your barter journey</p>
+  </div>
+</section>
+
+<!-- Login Section -->
+<section class="login-section">
+  <div class="login-container">
+    <h2>Login</h2>
+
+    <!-- Django messages -->
+    {% if messages %}
+      <div class="login-messages">
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post" class="login-form">
+      {% csrf_token %}
+      <div class="form-group">
         <label for="id_username">Username:</label>
         <input type="text" name="username" id="id_username" required>
-    </div>
-    <div>
+      </div>
+      <div class="form-group">
         <label for="id_password">Password:</label>
         <input type="password" name="password" id="id_password" required>
-    </div>
-    <button type="submit">Login</button>
-</form>
+      </div>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+</section>
+{% endblock %}
