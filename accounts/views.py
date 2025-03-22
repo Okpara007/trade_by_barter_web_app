@@ -7,6 +7,14 @@ from .models import Profile
 from .decorators import agent_required
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from utils import get_db_handle
+from bson import ObjectId
+import hashlib
+
+# MongoDB connection parameters
+from pymongo import MongoClient
+client = MongoClient('mongodb+srv://sarah:Puffalump123@cluster0.6kmuw7y.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+db = client['Cluster0']
 
 def register(request):
     if request.method == 'POST':
@@ -14,7 +22,16 @@ def register(request):
         if form.is_valid():
             user = form.save(commit=False)
             user.email = form.cleaned_data['email']
-            user.save()
+            user.role = form.cleaned_data['role']
+            # Hash the password before saving
+            hashed_password = hashlib.sha256(form.cleaned_data['password1'].encode()).hexdigest()
+            user_data = {
+                'username': user.username,
+                'email': user.email,
+                'password': hashed_password,
+                'role': user.role
+            }
+            db.users.insert_one(user_data)  # Save user data to MongoDB
             
             role = form.cleaned_data.get('role')
             if role == 'agent':
@@ -22,7 +39,8 @@ def register(request):
             else:
                 approved = True 
 
-            Profile.objects.create(user=user, role=role, approved=approved)
+            user.save()  # Save the user first
+            Profile.objects.create(user=user, role=role, approved=approved)  # Create the profile after saving the user
 
             login(request, user)
             return redirect('index')  
@@ -35,7 +53,11 @@ def user_login(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        user = authenticate(request, username=username, password=password)
+        # Authenticate user against MongoDB
+        user_data = db.users.find_one({'username': username})
+        if user_data and user_data['password'] == hashlib.sha256(password.encode()).hexdigest():
+            user = Profile(username=user_data['username'], email=user_data['email'])  # Create a user object
+            login(request, user)
         if user is not None:
             login(request, user)
             return redirect('index')  

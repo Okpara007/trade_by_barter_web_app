@@ -145,7 +145,7 @@
       <h2>Listing Details</h2>
       <p>{{ listing.description }}</p>
       {% if listing.image %}
-        <img src="{{ listing.image.url }}" alt="{{ listing.title }}">
+        <img src="{{ listing.image }}" alt="{{ listing.title }}">
       {% endif %}
       <div class="listing-meta">
         Posted by {{ listing.created_by.username }} 
@@ -156,7 +156,7 @@
 
     <div class="listing-buttons">
     {% if not is_owner %}
-      <a href="{% url 'chat_view' listing.pk %}">Chat with Seller</a>
+      <a href="{% url 'listing' listing.pk %}">Chat with Seller</a>
       <a href="{% url 'trade_request_create' listing.pk %}">Request Trade</a>
     {% endif %}
     </div>
