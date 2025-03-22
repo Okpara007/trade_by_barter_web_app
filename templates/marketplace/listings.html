@@ -108,9 +108,9 @@
         {% for listing in listings %}
         <div class="listing-item" data-aos="fade-up">
           <div class="listing-image">
-            <a href="{% url 'listing' listing.pk %}" title="{{ listing.title }}">
+            <a href="{% url 'listing' listing.id %}" title="{{ listing.title }}">
               {% if listing.image %}
-              <img src="{{ listing.image.url }}" alt="{{ listing.title }}">
+              <img src="{{ listing.image }}" alt="{{ listing.title }}">
               {% else %}
               <img src="{% static 'images/portfolio/placeholder.jpg' %}" alt="No Image Available">
               {% endif %}

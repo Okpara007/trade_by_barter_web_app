@@ -2,14 +2,24 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Listing, TradeRequest
+import cloudinary
+import cloudinary.uploader
+from bson import ObjectId  # Import ObjectId for MongoDB
+from django.utils import timezone
 from .forms import ListingForm, TradeRequestForm, ListingSearchForm
 from django.db.models import Q
+
+# MongoDB connection parameters
+from pymongo import MongoClient
+client = MongoClient('mongodb+srv://sarah:Puffalump123@cluster0.6kmuw7y.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+db = client['Cluster0']
 
 def listings(request):
     """
     Display a list of all listings.
     """
-    listings = Listing.objects.all().order_by('-created_at')
+    listings_data = db.listings.find().sort('created_at', -1)  # Fetch listings from MongoDB
+    listings = [{'title': listing['title'], 'description': listing['description'], 'created_at': listing['created_at'], 'preferred_trades': listing['preferred_trades'], 'image': listing['image'], 'id': listing['_id']} for listing in listings_data]  # Convert to list of dictionaries
     return render(request, 'marketplace/listings.html', {'listings': listings})
 
 @login_required
@@ -22,23 +32,50 @@ def create_listing(request):
         if form.is_valid():
             listing = form.save(commit=False)
             listing.created_by = request.user  
-            listing.save()
-            return redirect('listing', pk=listing.pk)
+            # Upload the image to Cloudinary
+            upload_result = cloudinary.uploader.upload(form.cleaned_data['image'])
+            image_url = upload_result['secure_url']
+            
+            # Save the listing to MongoDB with the image URL
+            listing_data = {
+                'title': listing.title,
+                'description': listing.description,
+                'created_at': timezone.now(),
+                'created_by': request.user.username,
+                'category': form.cleaned_data['category'],
+                'location': form.cleaned_data['location'],
+                'preferred_trades': form.cleaned_data['preferred_trades'],
+                'image': image_url
+            }
+            result = db.listings.insert_one(listing_data)  # Insert listing into MongoDB
+            return redirect('listing', pk=str(result.inserted_id))  # Redirect using MongoDB's _id
     else:
         form = ListingForm()
     return render(request, 'marketplace/create_listing.html', {'form': form})
 
 def listing(request, pk):
-    listing_obj = get_object_or_404(Listing, pk=pk)
-    is_owner = request.user.is_authenticated and (request.user == listing_obj.created_by)
+    listing_data = db.listings.find_one({'_id': ObjectId(pk)})  # Fetch listing from MongoDB
+    if listing_data is None:
+        raise Http404("Listing not found")
+    listing_obj = {
+        'title': listing_data['title'],
+        'description': listing_data['description'],
+        'created_at': listing_data['created_at'],
+        'created_by': listing_data['created_by'],
+        'location': listing_data['location'],
+        'preferred_trades': listing_data['preferred_trades'],
+        'image': listing_data['image'],
+        'pk': str(listing_data['_id'])  # Add the pk attribute
+    }
+    is_owner = request.user.is_authenticated and (request.user.username == listing_obj['created_by'])
     return render(request, 'marketplace/listing.html', {
         'listing': listing_obj,
         'is_owner': is_owner
     })
 
 @login_required
-def trade_request_create(request, listing_id):
-    listing = get_object_or_404(Listing, pk=listing_id)
+def trade_request_create(request, pk):
+    listing = db.listings.find_one({'_id': ObjectId(pk)})
     if request.method == 'POST':
         form = TradeRequestForm(request.POST)
         if form.is_valid():
@@ -102,20 +139,18 @@ def trade_request_reject(request, pk):
 
 def listing_search(request):
     form = ListingSearchForm(request.GET or None)
-    listings = Listing.objects.all().order_by('-created_at')
+    listings_data = db.listings.find().sort('created_at', -1)  # Fetch listings from MongoDB
+    listings = [{'title': listing['title'], 'description': listing['description'], 'created_at': listing['created_at'], 'location': listing['location'], 'preferred_trades': listing['preferred_trades'], 'image': listing['image'], 'id': listing['_id']} for listing in listings_data]  # Convert to list of dictionaries
 
     if form.is_valid():
         category = form.cleaned_data.get('category')
         location = form.cleaned_data.get('location')
-        trade_preferences = form.cleaned_data.get('trade_preferences')
         query = form.cleaned_data.get('query')
 
         if category:
             listings = listings.filter(category__icontains=category)
         if location:
             listings = listings.filter(location__icontains=location)
-        if trade_preferences:
-            listings = listings.filter(trade_preferences__icontains=trade_preferences)
         if query:
             listings = listings.filter(
                 Q(title__icontains=query) | Q(description__icontains=query)
@@ -125,4 +160,3 @@ def listing_search(request):
         'form': form,
         'listings': listings,
     }
-    return render(request, 'marketplace/listing_search.html', context)
