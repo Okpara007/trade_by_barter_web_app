@@ -3,7 +3,6 @@
 
 {% block content %}
 <style>
-  /* Short Hero Section */
   .profile-hero {
     position: relative;
     min-height: 40vh;
@@ -41,7 +40,6 @@
     line-height: 1.2;
   }
 
-  /* Profile Section */
   .profile-section {
     background: #111;
     padding: 4rem 2rem;
@@ -61,7 +59,6 @@
     text-align: center;
   }
 
-  /* Profile form styling */
   .profile-form {
     display: flex;
     flex-direction: column;
@@ -89,7 +86,6 @@
     outline: none;
   }
 
-  /* Submit button */
   .profile-form button {
     align-self: center;
     background: #39b54a;
@@ -133,7 +129,6 @@
     background: #2e8f3d;
   }
 
-  /* Responsive adjustments */
   @media only screen and (max-width: 600px) {
     .profile-hero-content h1 {
       font-size: 2.2rem;
@@ -156,7 +151,6 @@
   }
 </style>
 
-<!-- Short Hero Section -->
 <section class="profile-hero target-section" 
          data-parallax="scroll" 
          data-image-src="{% static 'images/background.jpg' %}" 
@@ -170,9 +164,9 @@
   </div>
 </section>
 
-<!-- Profile Section -->
  <div class="profile-buttons">
   <a href="{% url 'trade_request_list' %}"> View Requests</a>
+  <a href="{% url 'my_chats' %}">My Messages</a>
  </div>
 
 <section class="profile-section">

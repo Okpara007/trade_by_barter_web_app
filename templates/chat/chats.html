@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 2rem auto; background: #1b1b1b; padding: 2rem; border-radius: 5px; color: #fff;">
+  <h2 style="color: #fff;">My Messages</h2>
+  <ul>
+    {% for room in chat_rooms %}
+      <li style="margin-bottom: 1rem;">
+        <strong>Listing:</strong> {{ room.listing.title }}<br>
+        <strong>Participants:</strong>
+        {% for participant in room.participants.all %}
+          {{ participant.username }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+        <br>
+        <a href="{% url 'chat_view' room.listing.pk %}" style="color: #39b54a;">Open Chat</a>
+      </li>
+    {% empty %}
+      <li>You have no active chats.</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

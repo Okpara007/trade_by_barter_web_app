@@ -3,7 +3,6 @@
 
 {% block content %}
 <style>
-  /* Short Hero Section */
   .request-detail-hero {
     position: relative;
     min-height: 40vh;
@@ -41,7 +40,6 @@
     line-height: 1.2;
   }
 
-  /* Detail Section */
   .request-detail-section {
     background: #111;
     padding: 4rem 2rem;
@@ -60,7 +58,6 @@
     color: #39b54a;
   }
 
-  /* Request info layout */
   .request-info {
     margin-bottom: 2rem;
     font-size: 1.4rem;
@@ -74,7 +71,6 @@
     color: #ddd;
   }
 
-  /* Buttons container */
   .request-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -100,7 +96,6 @@
   .request-buttons a.btn-accept:hover {
     background: #2e8f3d;
   }
-  /* Reject Button (Red) */
   .request-buttons a.btn-reject {
     background: #ff6163;
   }
@@ -108,7 +103,16 @@
     background: #e85a5c;
   }
 
-  /* Responsive adjustments */
+  .listing-image img {
+    display: block;
+    margin: 1rem 0;
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border: 1px solid #444;
+    border-radius: 3px;
+  }
+
   @media only screen and (max-width: 600px) {
     .request-detail-hero-content h1 {
       font-size: 2.2rem;
@@ -126,7 +130,6 @@
   }
 </style>
 
-<!-- Short Hero Section -->
 <section class="request-detail-hero target-section" 
          data-parallax="scroll" 
          data-image-src="{% static 'images/background.jpg' %}" 
@@ -140,7 +143,6 @@
   </div>
 </section>
 
-<!-- Request Detail Section -->
 <section class="request-detail-section">
   <div class="request-detail-container">
     <div class="request-buttons">
@@ -153,16 +155,21 @@
       <p><strong>Receiver:</strong> {{ trade_request.receiver.username }}</p>
       <p><strong>Status:</strong> {{ trade_request.status }}</p>
       <p><strong>Message:</strong> {{ trade_request.message }}</p>
+    
+      {% if trade_request.listing.image %}
+        <div class="listing-image">
+          <img src="{{ trade_request.listing.image.url }}" 
+               alt="{{ trade_request.listing.title }}">
+        </div>
+      {% endif %}
     </div>
+    
 
-    <!-- Buttons for Accept/Reject if relevant -->
     <div class="request-buttons">
-      <!-- e.g., if user is the receiver and request is pending, show accept/reject -->
       {% if trade_request.status == 'pending' and user == trade_request.receiver %}
         <a class="btn-accept" href="{% url 'trade_request_accept' trade_request.pk %}">Accept</a>
         <a class="btn-reject" href="{% url 'trade_request_reject' trade_request.pk %}">Reject</a>
       {% endif %}
-      <!-- Back to Requests List -->
       
     </div>
   </div>

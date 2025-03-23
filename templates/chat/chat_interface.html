@@ -3,51 +3,107 @@
 
 {% block content %}
 <style>
-  /* Optional: Style the chat container */
-  #talkjs-container {
+  .chat-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    background: #1b1b1b;
+    padding: 1.5rem;
+    border-radius: 5px;
+    color: #fff;
+  }
+  .chat-header {
+    margin-bottom: 1.5rem;
+  }
+  .chat-messages {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #444;
+    padding: 1rem;
+    border-radius: 3px;
+    background: #2b2b2b;
+    margin-bottom: 1rem;
+  }
+
+  .message-block {
+    margin-bottom: 1rem;
+    max-width: 70%;
+    border-radius: 5px;
+    padding: 0.5rem;
+  }
+  .sender-message {
+    text-align: left;
+    margin-right: auto; 
+    background-color: #3b3b3b;
+  }
+  .receiver-message {
+    text-align: right;
+    margin-left: auto; 
+    background-color: #39b54a;
+  }
+  .message-block strong {
+    display: block;
+    font-weight: bold;
+  }
+  .message-block small {
+    font-size: 0.8rem;
+    color: #ccc;
+  }
+
+  .chat-form input {
     width: 100%;
-    height: 500px;
-    margin-top: 2rem;
+    height: 70px;
+    background: #2b2b2b;
+    border: 1px solid #444;
+    border-radius: 3px;
+    color: #fff;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .chat-form button {
+    background: #39b54a;
+    border: none;
+    border-radius: 3px;
+    color: #fff;
+    cursor: pointer;
+  }
+  .chat-form button:hover {
+    background: #2e8f3d;
   }
 </style>
 
-<div id="talkjs-container">
-  <i>Loading chat...</i>
-</div>
+<div class="chat-container">
+  <div class="chat-header">
+    <h2 style="color: #fff;">{{ listing.created_by.username }}'s Chat Room</h2>
+    <p>Regarding: {{ listing.title }}</p>
+  </div>
 
-<script>
-  // Ensure TalkJS is loaded before initializing
-  if (typeof Talk === 'undefined') {
-    console.error('TalkJS library is not loaded');
-  } else {
-    Talk.ready.then(function() {
-      // Define the current user
-      var me = new Talk.User({
-        id: "{{ request.user.id }}",
-        name: "{{ request.user.username }}",
-        email: "{{ request.user.email }}"
-      });
-      // Define the other user
-      var other = new Talk.User({
-        id: "{{ other_user.id }}",
-        name: "{{ other_user.username }}",
-        email: "{{ other_user.email }}"
-      });
-      // Initialize the session with the app ID
-      window.talkSession = new Talk.Session({
-        appId: "tw6C1KHF",
-        me: me
-      });
-      // Create or get a conversation
-      var conversation = talkSession.getOrCreateConversation(Talk.oneOnOneId(me, other));
-      conversation.setParticipant(me);
-      conversation.setParticipant(other);
-      // Mount the chatbox
-      var chatbox = talkSession.createChatbox(conversation);
-      chatbox.mount(document.getElementById("talkjs-container"));
-    }).catch(function(error) {
-      console.error("TalkJS initialization failed:", error);
-    });
-  }
-</script>
+  <div class="chat-messages">
+    {% for msg in messages %}
+      {% if msg.sender == request.user %}
+        <div class="message-block sender-message">
+          <strong>{{ msg.sender.username }}</strong>
+          {{ msg.message }}<br>
+          <!-- <small>{{ msg.timestamp|date:"M j, Y, g:i a" }}</small> -->
+        </div>
+      {% else %}
+        <!-- Other user's message -->
+        <div class="message-block receiver-message">
+          <strong>{{ msg.sender.username }}</strong>
+          {{ msg.message }}<br>
+          <!-- <small>{{ msg.timestamp|date:"M j, Y, g:i a" }}</small> -->
+        </div>
+      {% endif %}
+    {% empty %}
+      <p>No messages yet.</p>
+    {% endfor %}
+  </div>
+
+  <div class="chat-form">
+    <form method="POST">
+      {% csrf_token %}
+      <input name="message" placeholder="Type your message...">
+      <button type="submit">Send</button>
+    </form>
+  </div>
+</div>
 {% endblock %}

@@ -47,7 +47,7 @@ def trade_request_create(request, listing_id):
             trade_request.receiver = listing.created_by
             trade_request.listing = listing
             trade_request.save()
-            messages.success(request, "Trade request sent successfully!")
+            messages.success(request, "Trade request sent successfully! Check your profile to view request status")
             return redirect('listing', pk=listing.pk)
     else:
         form = TradeRequestForm()

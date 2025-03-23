@@ -40,7 +40,6 @@
     line-height: 1.2;
   }
 
-  /* Detail Section */
   .listing-detail-section {
     background: #111;
     padding: 4rem 2rem;
@@ -59,7 +58,6 @@
     color: #39b54a;
   }
 
-  /* Listing info layout */
   .listing-info {
     margin-bottom: 2rem;
   }
@@ -78,7 +76,6 @@
     margin: 1rem 0;
   }
 
-  /* Buttons container */
   .listing-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -102,7 +99,6 @@
     background: #2e8f3d;
   }
 
-  /* Responsive adjustments */
   @media only screen and (max-width: 600px) {
     .listing-detail-hero-content h1 {
       font-size: 2.2rem;
@@ -120,7 +116,7 @@
   }
 </style>
 
-<!-- Short Hero Section -->
+{% include 'partials/_alerts.html' %}
 <section class="listing-detail-hero target-section" 
          data-parallax="scroll" 
          data-image-src="{% static 'images/background.jpg' %}" 
@@ -134,12 +130,12 @@
   </div>
 </section>
 
-<!-- Listing Detail Section -->
 <section class="listing-detail-section">
   <div class="listing-detail-container">
     <div class="listing-info">
       <div class="listing-buttons">
         <a href="{% url 'listings' %}">Back to Listings</a> 
+        <!-- <a href="{% url 'my_chats' %}">My Chats</a> -->
       </div>
       <h2>Listing Details</h2>
       <p>{{ listing.description }}</p>
