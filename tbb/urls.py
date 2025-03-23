@@ -9,7 +9,7 @@ urlpatterns = [
     # path('services', include('services.urls')),
     path('accounts/', include('accounts.urls')),
     path('marketplace/', include('marketplace.urls')),
-    path('chat/', include('chat.urls')),
+    path('chats/', include('chat.urls')),
     # path('contacts/', include('contacts.urls')),
     # path('projects', include('projects.urls')),
     path('admin/', admin.site.urls),

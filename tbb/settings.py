@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'marketplace',
     'cloudinary',
     'cloudinary_storage',
+    'chat',
 ]
 
 MIDDLEWARE = [

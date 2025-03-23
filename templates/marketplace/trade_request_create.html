@@ -3,7 +3,6 @@
 
 {% block content %}
 <style>
-  /* Short Hero Section */
   .trade-request-hero {
     position: relative;
     min-height: 40vh;
@@ -135,7 +134,6 @@
   }
 </style>
 
-<!-- Short Hero Section -->
 <section class="trade-request-hero target-section" 
          data-parallax="scroll" 
          data-image-src="{% static 'images/background.jpg' %}" 
@@ -150,15 +148,12 @@
   </div>
 </section>
 
-<!-- Trade Request Section -->
 <section class="trade-request-section">
   <div class="trade-request-container">
     <h2>Send Trade Request for {{ listing.title }}</h2>
 
-    <!-- Remember to include enctype for file uploads -->
     <form method="post" enctype="multipart/form-data" class="trade-request-form">
       {% csrf_token %}
-      <!-- Example of manual field grouping if your form has 'message' and 'image' fields -->
       <div class="form-group">
         {{ form.message.label_tag }}
         {{ form.message }}

@@ -1,53 +1,53 @@
-
+{% extends 'base.html' %}
 {% load static %}
 
-<h1>Chat with Seller: {{ other_user_name }}</h1>
+{% block content %}
+<style>
+  /* Optional: Style the chat container */
+  #talkjs-container {
+    width: 100%;
+    height: 500px;
+    margin-top: 2rem;
+  }
+</style>
 
-<div id="talkjs-container" style="width: 90%; margin: 30px; height: 500px">
-    <i>Loading chat...</i>
+<div id="talkjs-container">
+  <i>Loading chat...</i>
 </div>
 
-<!-- Include TalkJS library -->
-<script src="https://cdn.talkjs.com/talk.js"></script>
 <script>
-  // Define the current user using Django context data.
-  const currentUser = {
-    id: "{{ request.user.id }}",
-    name: "{{ request.user.username }}",
-    email: "{{ request.user.email }}",
-    // Optionally, include photoUrl or welcomeMessage.
-  };
-
-  // Define the other user (listing owner) from context.
-  const otherUser = {
-    id: "{{ other_user_id }}",
-    name: "{{ other_user_name }}",
-    email: "{{ other_user_email }}",
-  };
-
-  Talk.ready.then(function() {
-    // Create the current TalkJS User
-    var me = new Talk.User(currentUser);
-    // Create the other TalkJS User
-    var other = new Talk.User(otherUser);
-
-    // Create a TalkJS session
-    window.talkSession = new Talk.Session({
-      appId: "sk_test_WWjGSo9LkEUIE4wixErFcMN69cXhIwew", // Replace with your TalkJS App ID
-      me: me,
+  // Ensure TalkJS is loaded before initializing
+  if (typeof Talk === 'undefined') {
+    console.error('TalkJS library is not loaded');
+  } else {
+    Talk.ready.then(function() {
+      // Define the current user
+      var me = new Talk.User({
+        id: "{{ request.user.id }}",
+        name: "{{ request.user.username }}",
+        email: "{{ request.user.email }}"
+      });
+      // Define the other user
+      var other = new Talk.User({
+        id: "{{ other_user.id }}",
+        name: "{{ other_user.username }}",
+        email: "{{ other_user.email }}"
+      });
+      // Initialize the session with the app ID
+      window.talkSession = new Talk.Session({
+        appId: "tw6C1KHF",
+        me: me
+      });
+      // Create or get a conversation
+      var conversation = talkSession.getOrCreateConversation(Talk.oneOnOneId(me, other));
+      conversation.setParticipant(me);
+      conversation.setParticipant(other);
+      // Mount the chatbox
+      var chatbox = talkSession.createChatbox(conversation);
+      chatbox.mount(document.getElementById("talkjs-container"));
+    }).catch(function(error) {
+      console.error("TalkJS initialization failed:", error);
     });
-
-    // Create or load a one-on-one conversation
-    var conversation = talkSession.getOrCreateConversation(
-      Talk.oneOnOneId(me, other)
-    );
-    conversation.setParticipant(me);
-    conversation.setParticipant(other);
-
-    // Create a chatbox, select the conversation, and mount it in the container.
-    var chatbox = talkSession.createChatbox();
-    chatbox.select(conversation);
-    chatbox.mount(document.getElementById("talkjs-container"));
-  });
+  }
 </script>
-
+{% endblock %}
