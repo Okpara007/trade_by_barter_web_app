@@ -3,6 +3,7 @@ import os
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,6 +46,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'tbb.urls'
@@ -73,10 +75,19 @@ WSGI_APPLICATION = 'tbb.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'tbbdb',
+        'USER': 'tbb',
+        'PASSWORD': 'tbb',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
+
+database_url = "postgresql://tbbdb_user:l2yQwn3MeOCUa8CBGTs090iw8I7NzKDf@dpg-cvfrvalumphs73dc5ol0-a.oregon-postgres.render.com/tbbdb"
+DATABASES["default"] = dj_database_url.parse(database_url)
+
+# postgresql://tbbdb_user:l2yQwn3MeOCUa8CBGTs090iw8I7NzKDf@dpg-cvfrvalumphs73dc5ol0-a.oregon-postgres.render.com/tbbdb
 
 
 # Password validation
@@ -128,6 +139,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'dystjcg1j',
