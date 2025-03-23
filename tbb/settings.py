@@ -19,7 +19,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = [ 'localhost', '127.0.0.1' ]
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'trade-by-barter-web-app.onrender.com', 'www.trade-by-barter-web-app.onrender.com']
 
 # Application definition
 
