@@ -65,6 +65,10 @@
     .listing-image {
       height: 250px;
     }
+    .subhead,
+    .display-2--light {
+      display: none;
+    }
   }
 
   .create-listing-btn {
@@ -96,8 +100,8 @@
   <div class="intro-wrap" style="padding: 6rem 0 3rem;">
     <div class="row section-header has-bottom-sep light-sep" data-aos="fade-up">
       <div class="col-full">
-        <!-- <h3 class="subhead">All Items</h3> -->
-        <!-- <h1 class="display-2 display-2--light">Browse &amp; Barter</h1> -->
+        <h3 class="subhead">All Items</h3>
+        <h1 class="display-2 display-2--light">Browse &amp; Barter</h1>
       </div>
     </div>
   </div>
@@ -130,9 +134,27 @@
     </div>
   </div>
 
-  <div class="home-content__buttons" data-aos="fade-up">
+  <div class="listing-actions" data-aos="fade-up">
     <a href="{% url 'create_listing' %}" class="btn btn--primary btn--large">Create New Listing</a>
     <a href="{% url 'listing_search' %}" class="btn btn--primary btn--large">Search Listings</a>
   </div>
 </section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    function adjustListingActionsClass() {
+      var container = document.querySelector('.listing-actions, .home-content__buttons');
+      if (container) {
+        if (window.innerWidth <= 600) {
+          container.className = 'home-content__buttons';
+        } else {
+          container.className = 'listing-actions';
+        }
+      }
+    }
+    adjustListingActionsClass();
+    window.addEventListener('resize', adjustListingActionsClass);
+  });
+</script>
+
 {% endblock %}
