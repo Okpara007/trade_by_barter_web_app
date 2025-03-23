@@ -4,6 +4,7 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 import dj_database_url
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -13,12 +14,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-jx432ti9-vvy_^^_32id&gnwf)=u(cn%vj=belcpqko-89f93&'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [ 'localhost', '127.0.0.1',]
 
 
 # Application definition
@@ -73,22 +74,20 @@ WSGI_APPLICATION = 'tbb.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'tbbdb',
+#         'USER': 'tbb',
+#         'PASSWORD': 'tbb',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'tbbdb',
-        'USER': 'tbb',
-        'PASSWORD': 'tbb',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(default=config('DATABASE_URL'))
 }
-
-database_url = "postgresql://tbbdb_user:l2yQwn3MeOCUa8CBGTs090iw8I7NzKDf@dpg-cvfrvalumphs73dc5ol0-a.oregon-postgres.render.com/tbbdb"
-DATABASES["default"] = dj_database_url.parse(database_url)
-
-# postgresql://tbbdb_user:l2yQwn3MeOCUa8CBGTs090iw8I7NzKDf@dpg-cvfrvalumphs73dc5ol0-a.oregon-postgres.render.com/tbbdb
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -143,10 +142,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dystjcg1j',
-    'API_KEY': '716197218755935',
-    'API_SECRET': 'Fq1AYvBjvSZy7M6rSbY8W9ABDWo',
-    'PREFIX': 'TradeByBarter'
+    'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': config('CLOUDINARY_API_KEY'),
+    'API_SECRET': config('CLOUDINARY_API_SECRET'),
+    'PREFIX': config('CLOUDINARY_PREFIX'),
 }
 
 cloudinary.config(
