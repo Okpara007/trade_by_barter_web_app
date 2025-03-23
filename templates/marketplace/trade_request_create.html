@@ -156,7 +156,7 @@
     <h2>Send Trade Request for {{ listing.title }}</h2>
 
     <!-- Remember to include enctype for file uploads -->
-    <form action="{% url 'trade_request_create' listing.id %}" method="post" enctype="multipart/form-data" class="trade-request-form">
+    <form method="post" enctype="multipart/form-data" class="trade-request-form">
       {% csrf_token %}
       <!-- Example of manual field grouping if your form has 'message' and 'image' fields -->
       <div class="form-group">
@@ -169,7 +169,8 @@
         {{ form.image }}
         {{ form.image.errors }}
       </div>
-      <input type="hidden" name="listing_id" value="{{ listing.id }}">
       <button type="submit">Send Request</button>
+    </form>
   </div>
 </section>
+{% endblock %}

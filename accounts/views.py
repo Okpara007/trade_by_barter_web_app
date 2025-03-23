@@ -20,7 +20,7 @@ def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
+            user = form.save()  # Save the user using Django's User model
             user.email = form.cleaned_data['email']
             user.role = form.cleaned_data['role']
             # Hash the password before saving
@@ -42,7 +42,7 @@ def register(request):
             user.save()  # Save the user first
             Profile.objects.create(user=user, role=role, approved=approved)  # Create the profile after saving the user
 
-            login(request, user)
+            login(request, user)  # Log the user in
             return redirect('index')  
     else:
         form = CustomUserCreationForm()
@@ -56,8 +56,8 @@ def user_login(request):
         # Authenticate user against MongoDB
         user_data = db.users.find_one({'username': username})
         if user_data and user_data['password'] == hashlib.sha256(password.encode()).hexdigest():
-            user = Profile(username=user_data['username'], email=user_data['email'])  # Create a user object
-            login(request, user)
+            user = authenticate(request, username=username, password=password)  # Authenticate against Django's User model
+            login(request, user)  # Log the user in
         if user is not None:
             login(request, user)
             return redirect('index')  

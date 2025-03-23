@@ -8,6 +8,7 @@ from bson import ObjectId  # Import ObjectId for MongoDB
 from django.utils import timezone
 from .forms import ListingForm, TradeRequestForm, ListingSearchForm
 from django.db.models import Q
+from django.contrib.auth.models import User
 
 # MongoDB connection parameters
 from pymongo import MongoClient
@@ -41,7 +42,7 @@ def create_listing(request):
                 'title': listing.title,
                 'description': listing.description,
                 'created_at': timezone.now(),
-                'created_by': request.user.username,
+                'created_by': request.user,
                 'category': form.cleaned_data['category'],
                 'location': form.cleaned_data['location'],
                 'preferred_trades': form.cleaned_data['preferred_trades'],
@@ -75,17 +76,30 @@ def listing(request, pk):
 
 @login_required
 def trade_request_create(request, pk):
-    listing = db.listings.find_one({'_id': ObjectId(pk)})
+    listing_data = db.listings.find_one({'_id': ObjectId(pk)})
     if request.method == 'POST':
         form = TradeRequestForm(request.POST)
         if form.is_valid():
             trade_request = form.save(commit=False)
             trade_request.sender = request.user
-            trade_request.receiver = listing.created_by
-            trade_request.listing = listing
+            trade_request.receiver = User.objects.get(username=listing_data['created_by'])
+            
+            # Create a new Listing instance using the MongoDB data
+            new_listing = Listing.objects.create(
+                title=listing_data['title'],
+                description=listing_data['description'],
+                created_at=timezone.now(),
+                created_by=request.user,
+                category=listing_data['category'],
+                location=listing_data['location'],
+                preferred_trades=listing_data['preferred_trades'],
+                image=listing_data['image']
+            )
+            trade_request.listing = new_listing
+            
             trade_request.save()
             messages.success(request, "Trade request sent successfully!")
-            return redirect('listing', pk=listing.pk)
+            return redirect('listing', pk=pk)
     else:
         form = TradeRequestForm()
 
@@ -146,11 +160,7 @@ def listing_search(request):
         category = form.cleaned_data.get('category')
         location = form.cleaned_data.get('location')
         query = form.cleaned_data.get('query')
-
-        if category:
-            listings = listings.filter(category__icontains=category)
-        if location:
-            listings = listings.filter(location__icontains=location)
+        listings = listings.filter(location__icontains=location)
         if query:
             listings = listings.filter(
                 Q(title__icontains=query) | Q(description__icontains=query)
